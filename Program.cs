@@ -102,50 +102,6 @@ namespace MatrixCalculator {
       return this.GetType().ToString();
     }
   }
-    //Класс Исключения
-    public static class ExceptionFinder {
-      public static void Exception(string error) {
-        Console.WriteLine("An error has occurred. Please read the instructions carefully and restart the program; ERROR name is:" + error);
-      }
-    }
-
-    // Класс операций над матрицами
-    // Класс сложения матриц
-    public class PlusMatrix {
-      public int rowsForFirstMatrix, columnsForFirstMatrix, first, second, plusRows, plusColumns;
-      public int[,] SumMatrix;
-
-      // Конструктор
-      public PlusMatrix(int rowsForFirstMatrix, int columnsForFirstMatrix) {
-        this.rowsForFirstMatrix = rowsForFirstMatrix;
-        this.columnsForFirstMatrix = columnsForFirstMatrix;
-        this.SumMatrix = new int[rowsForFirstMatrix, columnsForFirstMatrix];
-      }
-
-      // Метод для заполнения из копии
-      public void FillFromCopy(int[,] copy) {
-        for (int i = 0; i < rowsForFirstMatrix; i++) {
-          for (int j = 0; j < columnsForFirstMatrix; j++) {
-            SumMatrix[i, j] = copy[i, j];
-          }
-        }
-      }
-
-      // Перегрузка +
-      public static PlusMatrix operator +(PlusMatrix first, PlusMatrix second) {
-        PlusMatrix result = new PlusMatrix(first.rowsForFirstMatrix, first.columnsForFirstMatrix);
-
-        for (int plusRows = 0; plusRows < first.rowsForFirstMatrix; ++plusRows) {
-          for (int plusColumns = 0; plusColumns < first.columnsForFirstMatrix; ++plusColumns) {
-            result.SumMatrix[plusRows, plusColumns] = first.SumMatrix[plusRows, plusColumns] + second.SumMatrix[plusRows, plusColumns];
-          }
-        }
-        return result;
-      }
-    }
-
-    class MainProgramm {
-      static void Main() {
   //Класс Исключения
   public class MatrixSizeException : Exception {
     public MatrixSizeException(string message) : base(message) {
@@ -218,18 +174,11 @@ namespace MatrixCalculator {
             Console.WriteLine();
           }
         } else {
-            ExceptionFinder.Exception("Matrices of different sizes");
             throw new MatrixSizeException("Matrices of different sizes");
         }
 
         Console.WriteLine($"\nHash Code: {twoMatrix.GetHashCode()}");
         Console.WriteLine($"\n{twoMatrix.Tostring()}");
-      }
-    }
-}
-
-
-
 
       } 
       catch (MatrixSizeException ex) {  // Ловим НАШУ ошибку
