@@ -8,100 +8,110 @@ using System;
 
 namespace MatrixCalculator {
 
-  //Основной код матрицы
+  // Основной код матрицы
   class Matrix {
     public int[,] matrix, secondMatrix;
-    public int rowsForFirstMatrix, columnsForFirstMatrix, rowsCount, columnsCount, rowsForSecondMatrix, columnsForSecondMatrix, copyColumns, copyRows, getCopyFirstMatrix, GetCopySecondMatrixбб, twoMatrix, firstNewMatrixForSumma, secondNewMatrixForSumma;
+    public int rowsForFirstMatrix, columnsForFirstMatrix, rowsCount, columnsCount, rowsForSecondMatrix, columnsForSecondMatrix, copyColumns, copyRows, getCopyFirstMatrix, GetCopySecondMatrix, twoMatrix, firstNewMatrixForSumma, secondNewMatrixForSumma;
 
-    //"Прототип"
+    // "Прототип"
     public int[,] CopyFirstMatrix() {
       int[,] copy = new int[rowsForFirstMatrix, columnsForFirstMatrix];
 
-      for (int copyRows = 0; copyRows < rowsForFirstMatrix; ++copyRows) {
-        for (int copyColumns = 0; copyColumns < columnsForFirstMatrix; ++copyColumns) {
+      for (copyRows = 0; copyRows < rowsForFirstMatrix; ++copyRows) {
+        for (copyColumns = 0; copyColumns < columnsForFirstMatrix; ++copyColumns) {
           copy[copyRows, copyColumns] = matrix[copyRows, copyColumns];
         }
       }
       return copy;
     }
 
-    //"Прототип"
+    // "Прототип"
     public int[,] CopySecondMatrix() {
       int[,] copy = new int[rowsForSecondMatrix, columnsForSecondMatrix];
 
-      for (int copyRows = 0; copyRows < rowsForSecondMatrix; ++copyRows) {
-        for (int copyColumns = 0; copyColumns < columnsForSecondMatrix; ++copyColumns)  // ИСПРАВЛЕНО
-        {
+      for (copyRows = 0; copyRows < rowsForSecondMatrix; ++copyRows) {
+        for (copyColumns = 0; copyColumns < columnsForSecondMatrix; ++copyColumns) {
           copy[copyRows, copyColumns] = secondMatrix[copyRows, copyColumns];
         }
       }
       return copy;
     }
 
-    //Конструктор с вводом с клавиатуры
+    // Конструктор с вводом с клавиатуры
     public Matrix() {
-      Console.Write("Enter the number of rowsForFirstMatrix for the first matrix: ");
+      Console.Write("Enter the number of rows for the first matrix: ");
       rowsForFirstMatrix = int.Parse(Console.ReadLine());
 
-      Console.Write("Enter the number of columnsForFirstMatrix for the first matrix: ");
+      Console.Write("Enter the number of columns for the first matrix: ");
       columnsForFirstMatrix = int.Parse(Console.ReadLine());
+
+      // ПРОВЕРКА НА КВАДРАТНОСТЬ ПЕРВОЙ МАТРИЦЫ
+      if (rowsForFirstMatrix != columnsForFirstMatrix) {
+        throw new MatrixSizeException("First matrix must be square!");
+      }
       Console.WriteLine();
 
-      Console.Write("Enter the number of rowsForFirstMatrix for the second matrix: ");
+      Console.Write("Enter the number of rows for the second matrix: ");
       rowsForSecondMatrix = int.Parse(Console.ReadLine());
 
-      Console.Write("Enter the number of columnsForFirstMatrix for second matrix: ");
+      Console.Write("Enter the number of columns for the second matrix: ");
       columnsForSecondMatrix = int.Parse(Console.ReadLine());
+
+      // ПРОВЕРКА НА КВАДРАТНОСТЬ ВТОРОЙ МАТРИЦЫ
+      if (rowsForSecondMatrix != columnsForSecondMatrix) {
+        throw new MatrixSizeException("Second matrix must be square!");
+      }
       Console.WriteLine();
 
       matrix = new int[rowsForFirstMatrix, columnsForFirstMatrix];
       secondMatrix = new int[rowsForSecondMatrix, columnsForSecondMatrix];
 
-      //Сначала весь ввод первой матрицы
-      for (int rowsCount = 0; rowsCount < rowsForFirstMatrix; ++rowsCount) {
-        for (int columnsCount = 0; columnsCount < columnsForFirstMatrix; ++columnsCount) {
+      // Сначала весь ввод первой матрицы
+      for (rowsCount = 0; rowsCount < rowsForFirstMatrix; ++rowsCount) {
+        for (columnsCount = 0; columnsCount < columnsForFirstMatrix; ++columnsCount) {
           Console.Write($"Enter matrix[{rowsCount},{columnsCount}]: ");
           matrix[rowsCount, columnsCount] = int.Parse(Console.ReadLine());
         }
       }
 
-      //Теперь весь ввод второй матрицы
-      for (int rowsCount = 0; rowsCount < rowsForSecondMatrix; ++rowsCount) {
-        for (int columnsCount = 0; columnsCount < columnsForSecondMatrix; ++columnsCount) {
+      // Теперь весь ввод второй матрицы
+      for (rowsCount = 0; rowsCount < rowsForSecondMatrix; ++rowsCount) {
+        for (columnsCount = 0; columnsCount < columnsForSecondMatrix; ++columnsCount) {
           Console.Write($"Enter second matrix[{rowsCount},{columnsCount}]: ");
           secondMatrix[rowsCount, columnsCount] = int.Parse(Console.ReadLine());
         }
       }
 
-      //Потом весь вывод первой матрицы
+      // Потом весь вывод первой матрицы
       Console.WriteLine("\nFirst matrix:");
-      for (int rowsCount = 0; rowsCount < rowsForFirstMatrix; ++rowsCount) {
-        for (int columnsCount = 0; columnsCount < columnsForFirstMatrix; ++columnsCount) {
+      for (rowsCount = 0; rowsCount < rowsForFirstMatrix; ++rowsCount) {
+        for (columnsCount = 0; columnsCount < columnsForFirstMatrix; ++columnsCount) {
           Console.Write(matrix[rowsCount, columnsCount] + " ");
         }
         Console.WriteLine();
       }
 
-      //Потом весь вывод второй матрицы
+      // Потом весь вывод второй матрицы
       Console.WriteLine("\nSecond matrix:");
-      for (int rowsCount = 0; rowsCount < rowsForSecondMatrix; ++rowsCount) {
-        for (int columnsCount = 0; columnsCount < columnsForSecondMatrix; ++columnsCount) {
+      for (rowsCount = 0; rowsCount < rowsForSecondMatrix; ++rowsCount) {
+        for (columnsCount = 0; columnsCount < columnsForSecondMatrix; ++columnsCount) {
           Console.Write(secondMatrix[rowsCount, columnsCount] + " ");
         }
         Console.WriteLine();
       }
     }
 
-    //Нахождения Hash-кода
+    // Нахождения Hash-кода
     public override int GetHashCode() {
       return HashCode.Combine(matrix, secondMatrix);
     }
 
-    //Вывод в строку
-    public virtual string Tostring() {
+    // Вывод в строку
+    public override string ToString() {
       return this.GetType().ToString();
     }
   }
+
   //Класс Исключения
   public class MatrixSizeException : Exception {
     public MatrixSizeException(string message) : base(message) {
@@ -111,7 +121,8 @@ namespace MatrixCalculator {
   // Класс операций над матрицами
   // Класс сложения матриц
   public class PlusMatrix {
-    public int rowsForFirstMatrix, columnsForFirstMatrix, first, second, plusRows, plusColumns;
+    public int rowsForFirstMatrix, columnsForFirstMatrix, first, second;
+    public static int rowsForCopy, columnsForCopy, plusRows, plusColumns;
     public int[,] SumMatrix;
 
     // Конструктор
@@ -123,9 +134,9 @@ namespace MatrixCalculator {
 
     // Метод для заполнения из копии
     public void FillFromCopy(int[,] copy) {
-      for (int i = 0; i < rowsForFirstMatrix; i++) {
-        for (int j = 0; j < columnsForFirstMatrix; j++) {
-          SumMatrix[i, j] = copy[i, j];
+      for (int rowsForCopy = 0; rowsForCopy < rowsForFirstMatrix; ++rowsForCopy) {
+        for (int columnsForCopy = 0; columnsForCopy < columnsForFirstMatrix; ++columnsForCopy) {
+          SumMatrix[rowsForCopy, columnsForCopy] = copy[rowsForCopy, columnsForCopy];
         }
       }
     }
@@ -134,8 +145,8 @@ namespace MatrixCalculator {
     public static PlusMatrix operator +(PlusMatrix first, PlusMatrix second) {
       PlusMatrix result = new PlusMatrix(first.rowsForFirstMatrix, first.columnsForFirstMatrix);
 
-      for (int plusRows = 0; plusRows < first.rowsForFirstMatrix; ++plusRows) {
-        for (int plusColumns = 0; plusColumns < first.columnsForFirstMatrix; ++plusColumns) {
+      for (plusRows = 0; plusRows < first.rowsForFirstMatrix; ++plusRows) {
+        for (plusColumns = 0; plusColumns < first.columnsForFirstMatrix; ++plusColumns) {
           result.SumMatrix[plusRows, plusColumns] = first.SumMatrix[plusRows, plusColumns] + second.SumMatrix[plusRows, plusColumns];
         }
       }
@@ -144,48 +155,46 @@ namespace MatrixCalculator {
   }
 
   class MainProgramm {
+    public static int plusColumns, plusRows;
     static void Main() {
       try {
-        //Ввод матриц
+        // Ввод матриц
         Matrix twoMatrix = new Matrix();
 
-        //ДЕЛАЕМ ГЛУБОКИЕ КОПИИ
+        // Копии
         int[,] firstCopy = twoMatrix.CopyFirstMatrix();
         int[,] secondCopy = twoMatrix.CopySecondMatrix();
 
-        //Создаем PlusMatrix для сложения
+        // Создаем PlusMatrix для сложения
         PlusMatrix firstNewMatrixForSumma = new PlusMatrix(twoMatrix.rowsForFirstMatrix, twoMatrix.columnsForFirstMatrix);
         PlusMatrix secondNewMatrixForSumma = new PlusMatrix(twoMatrix.rowsForSecondMatrix, twoMatrix.columnsForSecondMatrix);
 
-        //Заполняем их из копий
+        // Заполняем их из копий
         firstNewMatrixForSumma.FillFromCopy(firstCopy);
         secondNewMatrixForSumma.FillFromCopy(secondCopy);
 
-        // 5. Проверяем размеры и складываем
+        // Проверяем размеры и складываем
         if (twoMatrix.rowsForFirstMatrix == twoMatrix.rowsForSecondMatrix && twoMatrix.columnsForFirstMatrix == twoMatrix.columnsForSecondMatrix) {
           PlusMatrix result = firstNewMatrixForSumma + secondNewMatrixForSumma;
 
           // ВЫВОД ВНУТРИ IF!
           Console.WriteLine("\nSum Result:");
-          for (int plusRows = 0; plusRows < result.rowsForFirstMatrix; ++plusRows) {
-            for (int plusColumns = 0; plusColumns < result.columnsForFirstMatrix; ++plusColumns) {
+          for (plusRows = 0; plusRows < result.rowsForFirstMatrix; ++plusRows) {
+            for (plusColumns = 0; plusColumns < result.columnsForFirstMatrix; ++plusColumns) {
               Console.Write(result.SumMatrix[plusRows, plusColumns] + " ");
             }
             Console.WriteLine();
           }
         } else {
-            throw new MatrixSizeException("Matrices of different sizes");
+          throw new MatrixSizeException("Matrices of different sizes");
         }
 
         Console.WriteLine($"\nHash Code: {twoMatrix.GetHashCode()}");
-        Console.WriteLine($"\n{twoMatrix.Tostring()}");
+        Console.WriteLine($"\n{twoMatrix.ToString()}");
 
-      } 
-      catch (MatrixSizeException ex) {  // Ловим НАШУ ошибку
+      } catch (MatrixSizeException ex) {
         Console.WriteLine($"ERROR: {ex.Message}");
-      }
-
-      catch (Exception ex) {  // Ловим ВСЕ остальные ошибки
+      } catch (Exception ex) {
         Console.WriteLine($"ERROR: {ex.Message}");
       }
     }
