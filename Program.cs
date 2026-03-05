@@ -1,10 +1,12 @@
-<<<<<<< Updated upstream
-﻿using System;
+﻿/******************************************
+*  Создал Коновалов К.М.                  *
+*  Вариант: нету                          *
+*  Язык программирования: C#              *
+*******************************************/
+
+using System;
 
 namespace MatrixCalculator {
-=======
-﻿namespace MatrixCalculator {
->>>>>>> Stashed changes
 
   //Основной код матрицы
   class Matrix {
@@ -100,12 +102,6 @@ namespace MatrixCalculator {
       return this.GetType().ToString();
     }
   }
-<<<<<<< Updated upstream
-    //Класс Исключения
-    public static class ExceptionFinder {
-      public static void Exception(string error) {
-        Console.WriteLine("An error has occurred. Please read the instructions carefully and restart the program; ERROR name is:" + error);
-=======
   //Класс Исключения
   public class MatrixSizeException : Exception {
     public MatrixSizeException(string message) : base(message) {
@@ -131,47 +127,25 @@ namespace MatrixCalculator {
         for (int j = 0; j < columnsForFirstMatrix; j++) {
           SumMatrix[i, j] = copy[i, j];
         }
->>>>>>> Stashed changes
       }
     }
 
-    // Класс операций над матрицами
-    // Класс сложения матриц
-    public class PlusMatrix {
-      public int rowsForFirstMatrix, columnsForFirstMatrix, first, second, plusRows, plusColumns;
-      public int[,] SumMatrix;
+    // Перегрузка +
+    public static PlusMatrix operator +(PlusMatrix first, PlusMatrix second) {
+      PlusMatrix result = new PlusMatrix(first.rowsForFirstMatrix, first.columnsForFirstMatrix);
 
-      // Конструктор
-      public PlusMatrix(int rowsForFirstMatrix, int columnsForFirstMatrix) {
-        this.rowsForFirstMatrix = rowsForFirstMatrix;
-        this.columnsForFirstMatrix = columnsForFirstMatrix;
-        this.SumMatrix = new int[rowsForFirstMatrix, columnsForFirstMatrix];
-      }
-
-      // Метод для заполнения из копии
-      public void FillFromCopy(int[,] copy) {
-        for (int i = 0; i < rowsForFirstMatrix; i++) {
-          for (int j = 0; j < columnsForFirstMatrix; j++) {
-            SumMatrix[i, j] = copy[i, j];
-          }
+      for (int plusRows = 0; plusRows < first.rowsForFirstMatrix; ++plusRows) {
+        for (int plusColumns = 0; plusColumns < first.columnsForFirstMatrix; ++plusColumns) {
+          result.SumMatrix[plusRows, plusColumns] = first.SumMatrix[plusRows, plusColumns] + second.SumMatrix[plusRows, plusColumns];
         }
       }
-
-      // Перегрузка +
-      public static PlusMatrix operator +(PlusMatrix first, PlusMatrix second) {
-        PlusMatrix result = new PlusMatrix(first.rowsForFirstMatrix, first.columnsForFirstMatrix);
-
-        for (int plusRows = 0; plusRows < first.rowsForFirstMatrix; ++plusRows) {
-          for (int plusColumns = 0; plusColumns < first.columnsForFirstMatrix; ++plusColumns) {
-            result.SumMatrix[plusRows, plusColumns] = first.SumMatrix[plusRows, plusColumns] + second.SumMatrix[plusRows, plusColumns];
-          }
-        }
-        return result;
-      }
+      return result;
     }
+  }
 
-    class MainProgramm {
-      static void Main() {
+  class MainProgramm {
+    static void Main() {
+      try {
         //Ввод матриц
         Matrix twoMatrix = new Matrix();
 
@@ -200,29 +174,20 @@ namespace MatrixCalculator {
             Console.WriteLine();
           }
         } else {
-<<<<<<< Updated upstream
-            ExceptionFinder.Exception("Matrices of different sizes");
-=======
-          throw new MatrixSizeException("Matrices of different sizes");
->>>>>>> Stashed changes
+            throw new MatrixSizeException("Matrices of different sizes");
         }
 
         Console.WriteLine($"\nHash Code: {twoMatrix.GetHashCode()}");
         Console.WriteLine($"\n{twoMatrix.Tostring()}");
-<<<<<<< Updated upstream
-      }
-    }
-=======
 
-      } catch (MatrixSizeException ex) {  // Ловим НАШУ ошибку
+      } 
+      catch (MatrixSizeException ex) {  // Ловим НАШУ ошибку
         Console.WriteLine($"ERROR: {ex.Message}");
-      } catch (Exception ex) {  // Ловим ВСЕ остальные ошибки
+      }
+
+      catch (Exception ex) {  // Ловим ВСЕ остальные ошибки
         Console.WriteLine($"ERROR: {ex.Message}");
       }
     }
   }
->>>>>>> Stashed changes
 }
-
-
-
